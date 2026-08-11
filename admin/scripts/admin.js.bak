@@ -1,0 +1,331 @@
+/* ==========================================================================
+   MT IMPORTADOS - ADMIN PANEL / ERP CONTROLLER
+   Manages Products CRUD, Brands, Stock, Top 5 Weekly Bestsellers, Departments
+   ========================================================================== */
+
+class AdminManager {
+  constructor() {
+    this.editingProductId = null;
+    this.brands = this.loadBrands();
+    this.initDOM();
+  }
+
+  initDOM() {
+    document.addEventListener('DOMContentLoaded', () => {
+      this.renderAdminProductsTable();
+      this.renderBrandsList();
+      this.populateBrandSelect();
+      this.setupFormListeners();
+      this.setupDepartmentListener();
+    });
+  }
+
+  // --- BRAND MANAGEMENT ---
+  loadBrands() {
+    const saved = localStorage.getItem('mt_brands');
+    if (saved) {
+      try { return JSON.parse(saved); } catch(e) {}
+    }
+    return ["Maison Alhambra", "Lattafa", "Armaf", "MT Importados"];
+  }
+
+  saveBrands() {
+    localStorage.setItem('mt_brands', JSON.stringify(this.brands));
+    this.renderBrandsList();
+    this.populateBrandSelect();
+    if (window.categoryManager) {
+      window.categoryManager.renderBrandFilters();
+      // Re-bind events to the new checkboxes
+      window.categoryManager.bindFilterEvents();
+    }
+  }
+
+  addBrand() {
+    const input = document.getElementById('adm-new-brand-name');
+    const brandName = input.value.trim();
+    if (brandName && !this.brands.includes(brandName)) {
+      this.brands.push(brandName);
+      this.saveBrands();
+      input.value = '';
+    }
+  }
+
+  deleteBrand(brandName) {
+    if (confirm(`Tem certeza que deseja excluir a marca "${brandName}"?`)) {
+      this.brands = this.brands.filter(b => b !== brandName);
+      this.saveBrands();
+    }
+  }
+
+  renderBrandsList() {
+    const container = document.getElementById('admin-brands-list');
+    if (!container) return;
+    
+    container.innerHTML = this.brands.map(b => `
+      <div style="background:#e2e8f0; padding:6px 12px; border-radius:16px; font-size:0.75rem; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:8px;">
+        ${b}
+        <button type="button" style="color:#ef4444; font-weight:bold; cursor:pointer;" onclick="window.adminManager.deleteBrand('${b}')">✕</button>
+      </div>
+    `).join('');
+  }
+
+  populateBrandSelect() {
+    const select = document.getElementById('adm-p-brand');
+    if (!select) return;
+    
+    const currentVal = select.value;
+    select.innerHTML = `<option value="">-- Selecione uma Marca --</option>` + 
+      this.brands.map(b => `<option value="${b}">${b}</option>`).join('');
+    if (this.brands.includes(currentVal)) {
+      select.value = currentVal;
+    }
+  }
+
+  // --- PRODUCT MANAGEMENT ---
+  getProducts() {
+    return window.PRODUCTS_DATA || [];
+  }
+
+  saveProducts(newList) {
+    window.PRODUCTS_DATA = newList;
+    try {
+      localStorage.setItem('arome_catalog_override', JSON.stringify(newList));
+    } catch (e) {
+      console.error('Failed to save catalog in localStorage:', e);
+    }
+    this.renderAdminProductsTable();
+    
+    // Refresh frontend sections if functions exist
+    if (window.renderHomepageVitrines) window.renderHomepageVitrines();
+    if (window.categoryManager) window.categoryManager.renderProductsGrid();
+  }
+
+  renderAdminProductsTable() {
+    const tableBody = document.getElementById('admin-products-table-body');
+    if (!tableBody) return;
+
+    const products = this.getProducts();
+    if (products.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--color-text-muted);">Nenhum produto cadastrado no ERP.</td></tr>`;
+      return;
+    }
+
+    let html = '';
+    products.forEach((p, idx) => {
+      const top5Badge = p.top5Rank ? `<span style="background:var(--color-gold); color:#000; font-weight:700; padding:2px 6px; border-radius:4px;">#${p.top5Rank} TOP 5</span>` : '<span style="color:var(--color-text-muted);">-</span>';
+      
+      const inStock = p.stockQuantity > 0 || p.inStock === true;
+      const stockBadge = inStock ? `<span style="color:#10b981; font-weight:600;">${p.stockQuantity !== undefined ? p.stockQuantity : 'Disponível'}</span>` : `<span style="color:#ef4444; font-weight:600;">0 (Esgotado)</span>`;
+
+      html += `
+        <tr>
+          <td style="font-weight:700; font-size:0.75rem;">${p.sku || 'N/A'}</td>
+          <td><img src="${p.image}" alt="${p.title}" style="width:40px; height:40px; object-fit:contain; border-radius:4px;"></td>
+          <td style="font-weight:600; color:var(--color-text-main);">${p.title}</td>
+          <td style="font-size:0.8rem; color:#64748b;">${p.brand || 'N/A'}</td>
+          <td style="text-transform:capitalize; color:#db2777; font-weight:600; font-size:0.8rem;">${p.categorySlug || p.department || 'N/A'}</td>
+          <td>${stockBadge}</td>
+          <td style="font-weight:700;">R$ ${p.price.toFixed(2).replace('.', ',')}</td>
+          <td>${top5Badge}</td>
+          <td>
+            <div style="display:flex; gap:6px;">
+              <button class="btn-primary" style="padding:4px 8px; font-size:0.7rem;" onclick="window.adminManager.openEditModal('${p.id}')">Editar</button>
+              <button style="background:#ef4444; color:white; padding:4px 8px; font-size:0.7rem; border-radius:4px; font-weight:600;" onclick="window.adminManager.deleteProduct('${p.id}')">Excluir</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+
+    tableBody.innerHTML = html;
+  }
+
+  setupDepartmentListener() {
+    const deptSelect = document.getElementById('adm-p-department');
+    if (!deptSelect) return;
+
+    deptSelect.addEventListener('change', (e) => {
+      this.updateDynamicFields(e.target.value);
+    });
+  }
+
+  updateDynamicFields(categorySlug) {
+    document.querySelectorAll('.dynamic-spec-group').forEach(el => el.style.display = 'none');
+    
+    if (categorySlug === 'perfumes-arabes' || categorySlug === 'perfumes-importados') {
+      document.getElementById('specs-perfumes').style.display = 'block';
+    } else if (categorySlug === 'emagrecedores') {
+      document.getElementById('specs-emagrecedores').style.display = 'block';
+    } else if (categorySlug === 'exclusivos') {
+      document.getElementById('specs-exclusivos').style.display = 'block';
+    }
+  }
+
+  setupFormListeners() {
+    const form = document.getElementById('admin-product-form');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById('adm-p-title').value;
+      const sku = document.getElementById('adm-p-sku').value;
+      const brand = document.getElementById('adm-p-brand').value;
+      const categorySlug = document.getElementById('adm-p-department').value;
+      const realPrice = parseFloat(document.getElementById('adm-p-price').value);
+      const pixDiscount = parseFloat(document.getElementById('adm-p-pix-discount').value || 8);
+      
+      // Calculate full price (+8% for credit card)
+      const price = realPrice * 1.08;
+      const pixPrice = realPrice;
+      
+      const stockQuantity = parseInt(document.getElementById('adm-p-stock-qty').value || 0);
+      const top5Rank = parseInt(document.getElementById('adm-p-top5').value || 0);
+      const imageStr = document.getElementById('adm-p-image').value || 'assets/products/product_1.jpg';
+      const description = document.getElementById('adm-p-desc').value || title;
+
+      const imageArray = imageStr.split(',').map(s => s.trim());
+      const mainImage = imageArray[0];
+
+      // Dynamic Fields Collection
+      const dynamicSpecs = {
+        specType: categorySlug.includes('perfumes') ? 'perfume' : categorySlug
+      };
+
+      if (dynamicSpecs.specType === 'perfume') {
+        dynamicSpecs.topNotes = document.getElementById('adm-spec-top').value;
+        dynamicSpecs.heartNotes = document.getElementById('adm-spec-heart').value;
+        dynamicSpecs.baseNotes = document.getElementById('adm-spec-base').value;
+      } else if (dynamicSpecs.specType === 'emagrecedores') {
+        dynamicSpecs.activeIngredient = document.getElementById('adm-spec-active').value;
+        dynamicSpecs.usage = document.getElementById('adm-spec-usage').value;
+        dynamicSpecs.format = document.getElementById('adm-spec-format').value;
+      } else if (dynamicSpecs.specType === 'exclusivos') {
+        dynamicSpecs.material = document.getElementById('adm-spec-material').value;
+        dynamicSpecs.sizes = document.getElementById('adm-spec-sizes').value;
+        dynamicSpecs.edition = document.getElementById('adm-spec-edition').value;
+      }
+
+      let list = [...this.getProducts()];
+
+      if (this.editingProductId) {
+        // Edit existing
+        const idx = list.findIndex(p => p.id === this.editingProductId);
+        if (idx > -1) {
+          list[idx] = {
+            ...list[idx],
+            title, sku, brand, categorySlug, price, pixPrice, pixDiscount, stockQuantity,
+            inStock: stockQuantity > 0,
+            top5Rank: top5Rank > 0 ? top5Rank : null,
+            image: mainImage,
+            gallery: imageArray,
+            description,
+            specs: dynamicSpecs,
+            variants: dynamicSpecs.sizes ? dynamicSpecs.sizes.split(',').map(s=>s.trim()) : ["Padrão"]
+          };
+        }
+        this.editingProductId = null;
+      } else {
+        // Create new
+        const newProduct = {
+          id: 'p_' + Date.now(),
+          title,
+          sku,
+          brand,
+          categorySlug,
+          price,
+          pixPrice,
+          pixDiscount,
+          installments: 8,
+          rating: 5,
+          reviewsCount: 1,
+          image: mainImage,
+          gallery: imageArray,
+          badge: top5Rank > 0 ? `#${top5Rank} TOP 5` : 'NOVO',
+          top5Rank: top5Rank > 0 ? top5Rank : null,
+          stockQuantity,
+          inStock: stockQuantity > 0,
+          description,
+          specs: dynamicSpecs,
+          variants: dynamicSpecs.sizes ? dynamicSpecs.sizes.split(',').map(s=>s.trim()) : ["Padrão"]
+        };
+        list.unshift(newProduct);
+      }
+
+      this.saveProducts(list);
+      form.reset();
+      this.updateDynamicFields('');
+      alert('Produto salvo com sucesso no ERP! As alterações já estão visíveis na loja.');
+      document.getElementById('admin-form-container').style.display = 'none';
+    });
+  }
+
+  openNewProductModal() {
+    this.editingProductId = null;
+    const form = document.getElementById('admin-product-form');
+    if (form) form.reset();
+    
+    document.getElementById('adm-p-sku').value = 'SKU-' + Math.floor(Math.random() * 9000 + 1000);
+    this.updateDynamicFields(document.getElementById('adm-p-department').value);
+
+    const titleHeader = document.getElementById('adm-form-title');
+    if (titleHeader) titleHeader.textContent = 'Cadastrar Novo Produto (ERP)';
+    const container = document.getElementById('admin-form-container');
+    if (container) container.style.display = 'block';
+  }
+
+  openEditModal(productId) {
+    const p = this.getProducts().find(prod => prod.id === productId);
+    if (!p) return;
+
+    this.editingProductId = productId;
+    
+    document.getElementById('adm-p-title').value = p.title || '';
+    document.getElementById('adm-p-sku').value = p.sku || '';
+    document.getElementById('adm-p-brand').value = p.brand || '';
+    document.getElementById('adm-p-department').value = p.categorySlug || p.department || 'perfumes-arabes';
+    
+    this.updateDynamicFields(p.categorySlug || p.department);
+    
+    document.getElementById('adm-p-price').value = p.pixPrice || (p.price ? (p.price / 1.08).toFixed(2) : 0);
+    document.getElementById('adm-p-pix-discount').value = p.pixDiscount || 8;
+    document.getElementById('adm-p-top5').value = p.top5Rank || 0;
+    document.getElementById('adm-p-stock-qty').value = p.stockQuantity !== undefined ? p.stockQuantity : (p.inStock ? 10 : 0);
+    
+    document.getElementById('adm-p-image').value = (p.gallery && p.gallery.length > 0) ? p.gallery.join(', ') : p.image;
+    document.getElementById('adm-p-desc').value = p.description || p.editorialDesc || '';
+
+    // Populate Dynamic Specs if they exist
+    if (p.specs) {
+      if (p.specs.specType === 'perfume') {
+        document.getElementById('adm-spec-top').value = p.specs.topNotes || p.topNotes || '';
+        document.getElementById('adm-spec-heart').value = p.specs.heartNotes || p.heartNotes || '';
+        document.getElementById('adm-spec-base').value = p.specs.baseNotes || p.baseNotes || '';
+      } else if (p.specs.specType === 'emagrecedores') {
+        document.getElementById('adm-spec-active').value = p.specs.activeIngredient || '';
+        document.getElementById('adm-spec-usage').value = p.specs.usage || '';
+        document.getElementById('adm-spec-format').value = p.specs.format || '';
+      } else if (p.specs.specType === 'exclusivos') {
+        document.getElementById('adm-spec-material').value = p.specs.material || '';
+        document.getElementById('adm-spec-sizes').value = p.specs.sizes || '';
+        document.getElementById('adm-spec-edition').value = p.specs.edition || '';
+      }
+    }
+
+    const titleHeader = document.getElementById('adm-form-title');
+    if (titleHeader) titleHeader.textContent = `Editar Produto: ${p.sku}`;
+    const container = document.getElementById('admin-form-container');
+    if (container) container.style.display = 'block';
+  }
+
+  deleteProduct(productId) {
+    if (confirm('Tem certeza que deseja excluir este produto do ERP?')) {
+      const list = this.getProducts().filter(p => p.id !== productId);
+      this.saveProducts(list);
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.adminManager = new AdminManager();
+});

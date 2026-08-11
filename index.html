@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MT Importados — Alta Perfumaria, Moda & Dermocosméticos</title>
+  <meta name="description" content="MT Importados: Perfumaria de Luxo, Árabes, Nicho, Alta Moda e Dermocosméticos. Entrega expressa para todo o Brasil.">
+  <link rel="icon" href="assets/logo/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css?v=1786454166">
+</head>
+<body class="">
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-item">MT IMPORTADOS — PERFUMARIA DE ALTO LUXO</div>
+      <div class="top-bar-item">PRODUTOS 100% ORIGINAIS</div>
+      <div class="top-bar-item">ATENDIMENTO EXCLUSIVO VIA WHATSAPP</div>
+      <div class="top-bar-item">DESCONTO EXCLUSIVO NO PIX</div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-main">
+      <div class="logo-container" onclick="window.navigateTo('home')">
+        <img src="assets/logo/logo.png" alt="MT Importados" class="logo-img">
+      </div>
+
+      <!-- Search Bar with Autocomplete -->
+      <div class="search-container">
+        <form class="search-form" onsubmit="event.preventDefault();">
+          <input type="text" id="site-search-input" class="search-input" placeholder="O que você procura? Perfumes, Roupas, Dermocosméticos..." autocomplete="off">
+          <button type="submit" class="search-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            BUSCAR
+          </button>
+        </form>
+        <div id="search-results-dropdown" class="search-results-dropdown"></div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <a href="https://wa.me/5554999999999" target="_blank" class="header-action-item">
+          <span>Atendimento VIP</span>
+        </a>
+        <button class="cart-icon-btn cart-trigger">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span class="cart-badge">1</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Navigation Menu Bar -->
+    <nav class="nav-menu-bar">
+      <div class="container">
+        <ul class="nav-menu-list">
+          <li class="nav-item">
+            <a onclick="window.navigateTo('home')" class="nav-link">Início</a>
+          </li>
+          <li class="nav-item">
+            <a onclick="window.navigateTo('category', {cat: 'perfumes-arabes'})" class="nav-link">Perfumes Árabes</a>
+          </li>
+          <li class="nav-item">
+            <a onclick="window.navigateTo('category', {cat: 'perfumes-importados'})" class="nav-link">Perfumes Importados</a>
+          </li>
+          <li class="nav-item">
+            <a onclick="window.navigateTo('category', {cat: 'emagrecedores'})" class="nav-link">Emagrecedores</a>
+          </li>
+          <li class="nav-item">
+            <a onclick="window.navigateTo('category', {cat: 'exclusivos'})" class="nav-link">Exclusivos</a>
+          </li>
+          <li class="nav-item">
+            <a onclick="window.navigateTo('about')" class="nav-link">Quem Somos</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main id="view-container">
+  <!-- ==========================================================================
+       VIEW SECTION 1: HOMEPAGE
+       ========================================================================== -->
+  <section id="view-home" class="view-section active">
+    <!-- Hero Banner Carousel -->
+    <div class="hero-carousel" id="hero-carousel">
+      <div class="carousel-track">
+        <div class="carousel-slide" style="cursor: pointer;" onclick="window.navigateTo('category', {cat: 'perfumes-arabes'})">
+          <div class="carousel-slide-bg" style="background-image:url('assets/banners/banner_seduction_arabe_novo.png')"></div>
+          <img src="assets/banners/banner_seduction_arabe_novo.png" alt="Perfumes Árabes de Luxo">
+        </div>
+        <div class="carousel-slide" style="cursor: pointer;" onclick="window.navigateTo('category', {cat: 'emagrecedores'})">
+          <div class="carousel-slide-bg" style="background-image:url('assets/banners/banner_emagrecedores_novo.png')"></div>
+          <img src="assets/banners/banner_emagrecedores_novo.png" alt="Emagrecedores e Alta Performance">
+        </div>
+        <div class="carousel-slide" style="cursor: pointer;" onclick="window.navigateTo('category', {cat: 'exclusivos'})">
+          <div class="carousel-slide-bg" style="background-image:url('assets/banners/banner_raras_limitadas.png')"></div>
+          <img src="assets/banners/banner_raras_limitadas.png" alt="Coleções Raras e Limitadas">
+        </div>
+      </div>
+      <button class="carousel-control prev">❮</button>
+      <button class="carousel-control next">❯</button>
+      <div class="carousel-indicators"></div>
+    </div>
+
+    <!-- Commercial Benefits Bar -->
+    <div class="benefits-section">
+      <div class="container benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-text">
+            <h4>100% Autênticos</h4>
+            <p>Garantia de procedência internacional e nota fiscal em cada compra</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-text">
+            <h4>Compra 100% Segura</h4>
+            <p>Plataforma MT Importados</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-text">
+            <h4>Desconto Especial no PIX</h4>
+            <p>Benefício exclusivo e automático para pagamentos à vista</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-text">
+            <h4>Envio Seguro & Ágil</h4>
+            <p>Embalagem protegida e rastreamento express para todo o Brasil</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOP 5 PRODUTOS DA SEMANA (RANKING VITRINE) -->
+    <div class="top5-vitrine-section">
+      <div class="container">
+        <div class="section-title-block" style="margin-top:0;">
+          <h2 style="font-weight: 800;">SELEÇÃO VIP — TOP <span style="font-variant-numeric: lining-nums; font-weight: 800;">5</span> DA SEMANA</h2>
+          <p>As escolhas mais cobiçadas dos últimos dias na MT Importados</p>
+        </div>
+        <div id="top5-products-grid" class="product-grid">
+          <!-- Rendered by main.js -->
+        </div>
+      </div>
+    </div>
+
+    <div class="category-vitrine-section">
+      <div class="container">
+        <div class="section-title-block">
+          <h2>PERFUMES ÁRABES</h2>
+          <p>Fragrâncias Orientais e Importados Finos</p>
+        </div>
+        <div class="carousel-grid-wrapper">
+          <button class="carousel-btn prev-btn" onclick="window.scrollCarousel('arabes-products-grid', -1)">&#10094;</button>
+          <div id="arabes-products-grid" class="home-carousel-grid">
+            <!-- Rendered by main.js -->
+          </div>
+          <button class="carousel-btn next-btn" onclick="window.scrollCarousel('arabes-products-grid', 1)">&#10095;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="category-vitrine-section" style="background: var(--color-bg-light); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: 56px 0;">
+      <div class="container">
+        <div class="section-title-block" style="margin-top:0;">
+          <h2>PERFUMES IMPORTADOS</h2>
+          <p>Os clássicos e mais desejados do mundo</p>
+        </div>
+        <div class="carousel-grid-wrapper">
+          <button class="carousel-btn prev-btn" onclick="window.scrollCarousel('importados-products-grid', -1)">&#10094;</button>
+          <div id="importados-products-grid" class="home-carousel-grid">
+            <!-- Rendered by main.js -->
+          </div>
+          <button class="carousel-btn next-btn" onclick="window.scrollCarousel('importados-products-grid', 1)">&#10095;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="category-vitrine-section">
+      <div class="container">
+        <div class="section-title-block">
+          <h2>EMAGRECEDORES & SAÚDE</h2>
+          <p>Emagrecedores e Saúde Premium</p>
+        </div>
+        <div class="carousel-grid-wrapper">
+          <button class="carousel-btn prev-btn" onclick="window.scrollCarousel('emagrecedores-products-grid', -1)">&#10094;</button>
+          <div id="emagrecedores-products-grid" class="home-carousel-grid">
+            <!-- Rendered by main.js -->
+          </div>
+          <button class="carousel-btn next-btn" onclick="window.scrollCarousel('emagrecedores-products-grid', 1)">&#10095;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="category-vitrine-section" style="background: var(--color-bg-light); border-top: 1px solid var(--color-border); padding: 56px 0;">
+      <div class="container">
+        <div class="section-title-block" style="margin-top:0;">
+          <h2>PRODUTOS EXCLUSIVOS</h2>
+          <p>Produtos Especiais e Edições Limitadas</p>
+        </div>
+        <div class="carousel-grid-wrapper">
+          <button class="carousel-btn prev-btn" onclick="window.scrollCarousel('exclusivos-products-grid', -1)">&#10094;</button>
+          <div id="exclusivos-products-grid" class="home-carousel-grid">
+            <!-- Rendered by main.js -->
+          </div>
+          <button class="carousel-btn next-btn" onclick="window.scrollCarousel('exclusivos-products-grid', 1)">&#10095;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categories Highlights Grid -->
+    <div class="container">
+      <div class="section-title-block">
+        <h2>Nossos Departamentos</h2>
+        <p>Navegue pelas nossas linhas exclusivas de produtos</p>
+      </div>
+      <div class="categories-grid">
+        <div class="category-banner-card" onclick="window.navigateTo('category', {cat: 'perfumes-arabes'})">
+          <img src="assets/store/cat_arabes.jpg" alt="Perfumes Árabes">
+          <div class="category-overlay">
+            <h3>Perfumes Árabes</h3>
+            <p>Fragrâncias Orientais e Importados Finos</p>
+          </div>
+        </div>
+        <div class="category-banner-card" onclick="window.navigateTo('category', {cat: 'emagrecedores'})">
+          <img src="assets/store/cat_emagrecedores.jpg" alt="Emagrecedores">
+          <div class="category-overlay">
+            <h3>Emagrecedores</h3>
+            <p>Emagrecedores e Saúde Premium</p>
+          </div>
+        </div>
+        <div class="category-banner-card" onclick="window.navigateTo('category', {cat: 'exclusivos'})">
+          <img src="assets/store/cat_exclusivos.jpg" alt="Exclusivos">
+          <div class="category-overlay">
+            <h3>Exclusivos</h3>
+            <p>Produtos Especiais e Edições Limitadas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       VIEW SECTION 2: CATEGORY LISTING
+       ========================================================================== -->
+  <section id="view-category" class="view-section">
+    <div class="container">
+      <div class="breadcrumb-bar">
+        <a onclick="window.navigateTo('home')">Home</a> / <span>Categorias</span> / <span id="breadcrumb-current">Perfumes Árabes</span>
+      </div>
+
+      <div class="category-header-banner">
+        <h1 id="category-title">Perfumes Árabes</h1>
+        <p id="category-desc" class="category-subtitle">
+          Descubra a intensidade e sofisticação das essências orientais. Frascos suntuosos e notas marcantes de OUD, âmbar e especiarias.
+        </p>
+        <div class="category-commercial-seal">
+          <span id="category-seal">Garantia de autenticidade MT Importados e desconto exclusivo no PIX.</span>
+        </div>
+      </div>
+
+      <div class="category-layout">
+        <aside class="filters-sidebar">
+          <div class="filters-header">
+            <h3>Filtros</h3>
+            <span id="active-filters-badge" class="active-filters-badge">0</span>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-group-title">Marca</div>
+            <div id="filter-brands-container">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-group-title">Gênero</div>
+            <label class="filter-option"><input type="checkbox" name="gender" value="Masculino"> Masculino</label>
+            <label class="filter-option"><input type="checkbox" name="gender" value="Feminino"> Feminino</label>
+            <label class="filter-option"><input type="checkbox" name="gender" value="Unissex"> Unissex</label>
+          </div>
+
+          <button id="btn-clear-filters" class="btn-clear-filters">Limpar Filtros Selecionados</button>
+        </aside>
+
+        <div>
+          <div class="listing-controls-bar">
+            <div id="category-count" class="products-count">(463 produtos)</div>
+            <div class="sorting-wrapper">
+              <label for="sort-select">Ordenar por:</label>
+              <select id="sort-select" class="select-sort">
+                <option value="relevance">Mais Vendidos</option>
+                <option value="price-asc">Menor Preço</option>
+                <option value="price-desc">Maior Preço</option>
+                <option value="rating">Melhor Avaliados</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="products-grid" class="product-grid">
+            <!-- Rendered by filters.js -->
+          </div>
+
+          <div class="pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">❯</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       VIEW SECTION 3: PRODUCT DETAILS
+       ========================================================================== -->
+  <section id="view-product" class="view-section">
+    <div id="product-detail-container" class="container">
+      <div class="breadcrumb-bar">
+        <a onclick="window.navigateTo('home')">Home</a> / <a id="product-category-link" onclick="window.navigateTo('category', {cat:'perfumes-arabes'})">Perfumes Árabes</a> / <span id="breadcrumb-product-title">Maison Alhambra Jean Lowe Immortel</span>
+      </div>
+
+      <div class="product-detail-layout">
+        <div class="gallery-block">
+          <div id="thumbnails-container" class="thumbnails-list">
+            <!-- Rendered by product.js -->
+          </div>
+          <div class="main-image-viewport">
+            <img id="main-product-img" src="assets/products/product_1.jpg" alt="Foto principal do produto">
+            <video id="main-product-video" controls style="display:none; max-height:460px; width:100%;"></video>
+          </div>
+        </div>
+
+        <div class="product-info-block">
+          <div class="product-meta-row">
+            <span id="product-sku" class="product-sku">Modelo: 1807</span>
+            <span>•</span>
+            <span style="color:var(--color-green-pix); font-weight:600;">Produto 100% Original MT Importados</span>
+          </div>
+
+          <h1 id="product-title" class="product-main-title">
+            Maison Alhambra Jean Lowe Immortel EDP Masculino
+          </h1>
+
+          <div id="product-rating-summary" class="product-stars" style="font-size: 0.9rem; margin-bottom: 16px;">
+            Sem avaliações ainda
+          </div>
+
+          <div class="price-card-box">
+            <div id="detail-price-old" class="detail-price-old">R$ 549,00</div>
+            <div class="detail-price-pix">
+              <span id="detail-pix-amount" class="amount">R$ 473,10</span>
+              <span id="detail-pix-tag" class="pix-tag">-8% NO PIX</span>
+            </div>
+            <div style="font-size:0.85rem; font-weight:700; color:var(--color-green-pix); margin-bottom:6px;">
+              à vista no PIX com desconto exclusivo
+            </div>
+            <div id="detail-installments" class="detail-installments" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div class="variant-selector-block">
+            <div class="variant-label">Opções Disponíveis:</div>
+            <div id="variants-options" class="variants-options">
+              <!-- Rendered by product.js -->
+            </div>
+          </div>
+
+          <div id="buy-button-container" style="margin-top: 24px;">
+            <!-- Rendered by product.js -->
+          </div>
+
+          <div id="out-of-stock-box" class="out-of-stock-box">
+            <!-- Rendered by product.js -->
+          </div>
+        </div>
+      </div>
+
+      <div class="product-details-tabs">
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="pyramid">Descrição & Perfil Editorial</button>
+          <button class="tab-btn" data-tab="specs">Ficha Técnica Detalhada</button>
+          <button class="tab-btn" data-tab="reviews">Avaliações (<span id="reviews-count-tab">0</span>)</button>
+        </div>
+
+        <div id="tab-panel-pyramid" class="tab-content-panel active">
+          <div style="margin-bottom: 28px;">
+            <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: #0a0a0d; font-weight: 600; margin-bottom: 12px;">
+              Detalhes & História do Produto
+            </h3>
+            <p id="product-editorial-desc" style="font-size: 0.95rem; line-height: 1.8; color: var(--color-text-main);">
+              Maison Alhambra Jean Lowe Immortel é um perfume Oriental Masculino lançado em 2023. A fragrância se abre com notas cítricas e refrescantes de gengibre e toranja.
+            </p>
+          </div>
+
+          <h4 style="font-family: var(--font-sans); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: #db2777; font-weight: 700; margin-bottom: 18px; text-align: center;">
+            Pirâmide Olfativa & Atributos Principais
+          </h4>
+
+          <div class="pyramid-container">
+            <div class="pyramid-tier">
+              <h4>Notas de Saída (Topo)</h4>
+              <p id="top-notes-text">Toranja (Grapefruit), Gengibre, Bergamota</p>
+            </div>
+            <div class="pyramid-tier">
+              <h4>Notas de Corpo (Coração)</h4>
+              <p id="heart-notes-text">Sálvia, Alecrim, Gerânio</p>
+            </div>
+            <div class="pyramid-tier">
+              <h4>Notas de Fundo (Fixação)</h4>
+              <p id="base-notes-text">Âmbar, Lábano, Bastão de Incenso</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-panel-specs" class="tab-content-panel">
+          <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: #0a0a0d; font-weight: 600; margin-bottom: 18px;">
+            Ficha Técnica Detalhada
+          </h3>
+          <table class="specs-table">
+            <tbody id="specs-table-body">
+              <!-- Rendered by product.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="tab-panel-reviews" class="tab-content-panel">
+          <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: #0a0a0d; font-weight: 600; margin-bottom: 18px;">
+            Avaliações de Clientes
+          </h3>
+
+          <div id="reviews-list" class="reviews-list">
+            <!-- Rendered by product.js -->
+          </div>
+
+          <div class="write-review-box">
+            <h4 style="font-family: var(--font-serif); font-size: 1.15rem; margin-bottom: 14px;">Deixe sua Avaliação</h4>
+            <form id="review-form">
+              <div class="admin-input-group" style="margin-bottom:14px;">
+                <label>Seu Nome</label>
+                <input type="text" id="review-author-name" required placeholder="Como você quer aparecer na avaliação">
+              </div>
+              <div class="admin-input-group" style="margin-bottom:14px;">
+                <label>Sua Nota</label>
+                <div id="review-star-picker" class="review-star-picker" data-rating="5">
+                  <span class="review-star active" data-value="1">★</span><span class="review-star active" data-value="2">★</span><span class="review-star active" data-value="3">★</span><span class="review-star active" data-value="4">★</span><span class="review-star active" data-value="5">★</span>
+                </div>
+              </div>
+              <div class="admin-input-group" style="margin-bottom:14px;">
+                <label>Comentário</label>
+                <textarea id="review-comment" rows="3" required placeholder="Conte como foi sua experiência com o produto..."></textarea>
+              </div>
+              <button type="submit" class="btn-primary" id="btn-submit-review">Enviar Avaliação</button>
+              <div id="review-form-status" style="font-size:0.85rem; margin-top:10px;"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Related Products Section -->
+      <div class="related-products-section" style="margin-top: 64px; margin-bottom: 24px;">
+        <div class="section-title-block">
+          <h2>PRODUTOS RELACIONADOS</h2>
+          <p>Você também pode gostar destas opções</p>
+        </div>
+        <div class="carousel-grid-wrapper">
+          <button class="carousel-btn prev-btn" onclick="window.scrollCarousel('related-products-grid', -1)">&#10094;</button>
+          <div id="related-products-grid" class="home-carousel-grid">
+            <!-- Rendered by product.js -->
+          </div>
+          <button class="carousel-btn next-btn" onclick="window.scrollCarousel('related-products-grid', 1)">&#10095;</button>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       VIEW SECTION 4: INSTITUTIONAL QUEM SOMOS
+       ========================================================================== -->
+  <section id="view-about" class="view-section">
+    <div class="container">
+      <div class="breadcrumb-bar">
+        <a onclick="window.navigateTo('home')">Home</a> / <span>Institucional</span> / <span>Quem Somos</span>
+      </div>
+
+      <div class="about-hero">
+        <h1>Quem Somos</h1>
+        <p>MT Importados: Excelência, Exclusividade e Confiança em Todo o Brasil</p>
+      </div>
+
+      <div class="about-content-section">
+        <div class="about-paragraph">
+          A <strong>MT Importados</strong> é a sua plataforma definitiva para aquisição de produtos importados de alto luxo, perfumaria premium, emagrecedores e itens exclusivos. Nascemos da paixão por conectar o público brasileiro ao que há de melhor, mais raro e mais desejado no mercado internacional, garantindo total transparência e segurança em cada transação.
+        </div>
+
+        <div class="about-paragraph">
+          Nossa operação é estruturada para fornecer um serviço de excelência. Todos os nossos produtos são 100% originais, adquiridos de fornecedores homologados e acompanham garantia de autenticidade. Mais do que vender produtos, nosso propósito é entregar uma experiência de compra impecável, com suporte VIP e entrega expressa para todas as regiões do país. Acreditamos que a verdadeira exclusividade deve ser acessível, segura e inesquecível.
+        </div>
+      </div>
+
+      <div class="trust-callout-banner">
+        <h2>EM NOSSO TRABALHO E QUALIDADE VOCÊ PODE CONFIAR</h2>
+        <p style="margin-top:12px; font-size:1.1rem;">Atendimento humanizado, envio rastreado e garantia de origem.</p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Sticky Bottom Conversion Bar for Product View -->
+  <div id="sticky-bottom-buy-bar" class="sticky-bottom-buy-bar">
+    <div class="container sticky-bar-content">
+      <div class="sticky-product-info">
+        <img id="sticky-bar-img" src="assets/products/product_1.jpg" alt="Thumb" class="sticky-product-thumb">
+        <div>
+          <div id="sticky-bar-title" class="sticky-product-title">Maison Alhambra Jean Lowe Immortel</div>
+          <div id="sticky-bar-price" class="sticky-product-price">R$ 473,10 no PIX</div>
+        </div>
+      </div>
+      <button class="btn-primary" style="padding: 12px 28px; font-size: 0.78rem; background-color: var(--color-green-pix); color:white;" onclick="window.cartManager.openWhatsAppCheckoutCurrentProduct()">
+        COMPRAR VIA WHATSAPP
+      </button>
+    </div>
+  </div>
+
+  </main>
+
+  <!-- Cookie & Privacy Banner (LGPD Compliant) -->
+  <div id="cookie-banner" class="cookie-banner">
+    <div class="cookie-header-row">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Segurança & Privacidade MT Importados</span>
+    </div>
+    <div style="color: #cbd5e1; font-size: 0.85rem; line-height: 1.5;">
+      Utilizamos cookies essenciais e tecnologias de segurança para garantir uma navegação 100% protegida, autenticidade dos produtos e conformidade com a LGPD.
+    </div>
+    <div class="cookie-actions-row">
+      <button id="btn-accept-cookies" class="btn-accept-cookies">ACEITAR & CONTINUAR</button>
+      <a onclick="window.openPrivacyModal('security')" class="btn-privacy-link">🔒 Termos de Segurança</a>
+      <a onclick="window.openPrivacyModal('lgpd')" class="btn-privacy-link">📜 Política de Privacidade</a>
+    </div>
+  </div>
+
+  <!-- MODAL DE POLÍTICA DE PRIVACIDADE, SEGURANÇA E TERMOS -->
+  <div id="privacy-security-modal" class="privacy-modal-overlay">
+    <div class="privacy-modal-container">
+      <div class="privacy-modal-header">
+        <h2>Segurança, Privacidade & Autenticidade</h2>
+        <button onclick="window.closePrivacyModal()" style="background:none; border:none; color:#ffffff; font-size:1.5rem; cursor:pointer;">&times;</button>
+      </div>
+
+      <div style="display:flex; border-bottom:1px solid #e2e8f0; background:#f8fafc; padding:0 16px; overflow-x:auto;">
+        <button class="privacy-tab-btn active" onclick="window.switchPrivacyTab('security', this)">🔒 Segurança & SSL</button>
+        <button class="privacy-tab-btn" onclick="window.switchPrivacyTab('authenticity', this)">🏆 Autenticidade Garantida</button>
+        <button class="privacy-tab-btn" onclick="window.switchPrivacyTab('lgpd', this)">🍪 LGPD & Cookies</button>
+        <button class="privacy-tab-btn" onclick="window.switchPrivacyTab('terms', this)">📜 Termos de Compra</button>
+      </div>
+
+      <div class="privacy-modal-body">
+        <div id="ptab-security" class="ptab-content">
+          <h3 style="color:#0f172a; margin-bottom:12px;">Protocolos de Segurança e Proteção de Dados</h3>
+          <p>Na <strong>MT Importados</strong>, a segurança das suas informações é tratada com rigor absoluto:</p>
+          <ul style="margin: 12px 0 16px 20px;">
+            <li><strong>Criptografia SSL 256-Bit:</strong> Todo o tráfego do site é encriptado com padrão bancário de alta segurança.</li>
+            <li><strong>Checkout 100% Protegido:</strong> Os pedidos via WhatsApp são direcionados diretamente à nossa equipe oficial com confirmação de dados.</li>
+            <li><strong>Proteção Anti-Fraude:</strong> Verificação rigorosa em todas as transações PIX e parcelamento.</li>
+          </ul>
+        </div>
+
+        <div id="ptab-authenticity" class="ptab-content" style="display:none;">
+          <h3 style="color:#0f172a; margin-bottom:12px;">Compromisso com Produtos 100% Originais</h3>
+          <p>Garantimos procedência direta e autenticidade inquestionável em todo o nosso catálogo:</p>
+          <ul style="margin: 12px 0 16px 20px;">
+            <li><strong>Importadores Autorizados:</strong> Perfumes Árabes (Lattafa, Maison Alhambra, Armaf) e Importados com lote rastreável.</li>
+            <li><strong>Garantia de Origem:</strong> Envio com nota, selo de procedência e lacre de garantia.</li>
+            <li><strong>Garantia de Devolução:</strong> Caso seja constatada qualquer divergência de lote, garantimos a devolução imediata do valor.</li>
+          </ul>
+        </div>
+
+        <div id="ptab-lgpd" class="ptab-content" style="display:none;">
+          <h3 style="color:#0f172a; margin-bottom:12px;">Política de Privacidade e Cookies (LGPD)</h3>
+          <p>Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018):</p>
+          <p style="margin-top:8px;">Coletamos apenas informações estritamente necessárias para a conclusão do seu pedido (Nome, E-mail e Telefone para contato no WhatsApp). Não vendemos nem compartilhamos seus dados com terceiros.</p>
+          <p style="margin-top:8px;">Os cookies utilizados servem exclusivamente para lembrar dos seus produtos no carrinho e melhorar a velocidade de navegação.</p>
+        </div>
+
+        <div id="ptab-terms" class="ptab-content" style="display:none;">
+          <h3 style="color:#0f172a; margin-bottom:12px;">Termos de Compra & Envio</h3>
+          <p>Ao realizar um pedido na MT Importados, você conta com suporte humanizado em todas as etapas:</p>
+          <ul style="margin: 12px 0 16px 20px;">
+            <li><strong>Rastreamento de Envio:</strong> Código enviado via WhatsApp em até 24h úteis após confirmação do pagamento.</li>
+            <li><strong>Embalagem Reforçada:</strong> Frascos de vidro e canetas suplementares embalados com proteção térmica e anti-impacto.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp Float Button -->
+  <a href="https://wa.me/5554999999999" target="_blank" class="whatsapp-float-btn" title="Fale conosco no WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+  </a>
+
+  <!-- MODAL DE CHECKOUT LIQUID GLASS (WHATSAPP) -->
+  <div id="whatsapp-checkout-modal" class="whatsapp-modal-overlay">
+    <div class="whatsapp-modal-card">
+      <div class="whatsapp-modal-header">
+        <h3>Finalizar Compra no WhatsApp</h3>
+        <button class="whatsapp-modal-close" onclick="window.cartManager.closeWhatsAppModal()">✕</button>
+      </div>
+      <div class="whatsapp-modal-body">
+        <div class="checkout-summary-box">
+          <img id="checkout-modal-thumb" src="assets/products/product_1.jpg" alt="Produto" class="checkout-thumb-img">
+          <div class="checkout-summary-info">
+            <h4 id="checkout-modal-title">Nome do Produto</h4>
+            <p id="checkout-modal-details">1x Unidade | MT Importados</p>
+            <div id="checkout-modal-price" class="checkout-summary-total">R$ 0,00 no PIX</div>
+          </div>
+        </div>
+
+        <form id="whatsapp-checkout-form" onsubmit="window.cartManager.submitWhatsAppCheckout(event);">
+          <div class="checkout-form-group">
+            <label for="checkout-user-name">Nome Completo *</label>
+            <input type="text" id="checkout-user-name" required placeholder="Digite seu nome completo">
+          </div>
+
+          <div class="checkout-form-group">
+            <label for="checkout-user-phone">Telefone / WhatsApp *</label>
+            <input type="tel" id="checkout-user-phone" required placeholder="(00) 90000-0000">
+          </div>
+
+          <div class="checkout-form-group">
+            <label for="checkout-user-email">E-mail *</label>
+            <input type="email" id="checkout-user-email" required placeholder="seuemail@exemplo.com">
+          </div>
+
+          <button type="submit" class="btn-whatsapp-submit">
+            CONCLUIR E ENVIAR PEDIDO NO WHATSAPP
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Side Drawer Overlay & Modal -->
+  <div id="cart-drawer-overlay" class="cart-drawer-overlay">
+    <div class="cart-drawer-panel">
+      <div class="cart-drawer-header">
+        <h3>Minha Sacola</h3>
+        <button class="cart-drawer-close" onclick="window.cartManager.closeDrawer()">✕</button>
+      </div>
+      <div id="cart-drawer-items" class="cart-drawer-body">
+        <!-- Rendered by cart.js -->
+      </div>
+      <div id="cart-drawer-summary" class="cart-drawer-footer">
+        <!-- Rendered by cart.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <h4>MT Importados</h4>
+        <p style="font-size: 0.85rem; color: #d1d5db; line-height: 1.6; margin-bottom: 16px;">
+          Sua plataforma premium de perfumes importados, emagrecedores e itens exclusivos. Qualidade garantida e entrega rápida para todo o Brasil.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Institucional & Segurança</h4>
+        <ul>
+          <li><a onclick="window.navigateTo('about')" style="cursor:pointer;">Quem Somos</a></li>
+          <li><a onclick="window.openPrivacyModal('security')" style="cursor:pointer;">🔒 Segurança & Criptografia SSL</a></li>
+          <li><a onclick="window.openPrivacyModal('authenticity')" style="cursor:pointer;">🏆 Garantia de Autenticidade</a></li>
+          <li><a onclick="window.openPrivacyModal('lgpd')" style="cursor:pointer;">🍪 Política de Privacidade (LGPD)</a></li>
+          <li><a onclick="window.openPrivacyModal('terms')" style="cursor:pointer;">📜 Termos e Condições de Compra</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Departamentos</h4>
+        <ul>
+          <li><a onclick="window.navigateTo('category', {cat: 'perfumes-arabes'})" style="cursor:pointer;">Perfumes Árabes</a></li>
+          <li><a onclick="window.navigateTo('category', {cat: 'perfumes-importados'})" style="cursor:pointer;">Perfumes Importados</a></li>
+          <li><a onclick="window.navigateTo('category', {cat: 'emagrecedores'})" style="cursor:pointer;">Emagrecedores</a></li>
+          <li><a onclick="window.navigateTo('category', {cat: 'exclusivos'})" style="cursor:pointer;">Exclusivos</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Atendimento & Compra Segura</h4>
+        <p style="font-size:0.85rem; color:#d1d5db; margin-bottom:12px;">Atendimento Oficial via WhatsApp</p>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:0.78rem; color: #9ca3af;">
+          <div style="display:flex; align-items:center; gap:6px; color:#f472b6;">
+            <span>🔒 SSL 256-Bit Encrypted</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; color:#059669;">
+            <span>✔ Produtos 100% Originais</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; color:#3b82f6;">
+            <span>📦 Envio Rastreado para Todo Brasil</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        © 2026 MT Importados — Todos os direitos reservados. Brasil.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="scripts/supabase.js?v=1786454166"></script>
+  <script src="scripts/main.js?v=1786454166"></script>
+  <script src="scripts/cart.js?v=1786454166"></script>
+  <script src="scripts/carousel.js?v=1786454166"></script>
+  <script src="scripts/filters.js?v=1786454166"></script>
+  <script src="scripts/product.js?v=1786454166"></script>
+</body>
+</html>

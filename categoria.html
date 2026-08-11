@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categorias - Arôme de Capelin</title>
+  <meta name="description" content="Explore nossas coleções exclusivas de Perfumes Árabes, Perfumes Importados, Nicho Chambre 52 e Produtos da Serra Gaúcha.">
+  <link rel="icon" href="assets/logo/favicon.png" type="image/png">
+  <link rel="stylesheet" href="styles/main.css?v=1786454166">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-item">🚚 FRETE GRÁTIS E RÁPIDO PARA TODO O BRASIL</div>
+      <div class="top-bar-item">💳 PARCELE EM ATÉ 8X SEM JUROS</div>
+      <div class="top-bar-item">✨ GANHE DESCONTO EXCLUSIVO NO PIX</div>
+      <div class="top-bar-item">🎁 CASHBACK EM TODA COMPRA</div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-main">
+      <div class="logo-container">
+        <a href="index.html">
+          <img src="assets/logo/logo.png" alt="Arôme de Capelin" class="logo-img">
+        </a>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <form class="search-form" onsubmit="event.preventDefault();">
+          <input type="text" id="site-search-input" class="search-input" placeholder="O que você está procurando hoje?" autocomplete="off">
+          <button type="submit" class="search-btn">🔍</button>
+        </form>
+        <div id="search-results-dropdown" class="search-results-dropdown"></div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <a href="https://wa.me/5554999999999" target="_blank" class="header-action-item">
+          <span style="font-size: 1.2rem;">💬</span>
+          <span>Fale Conosco</span>
+        </a>
+        <div class="header-action-item">
+          <span style="font-size: 1.2rem;">👤</span>
+          <span>Minha Conta</span>
+        </div>
+        <button class="cart-icon-btn cart-trigger">
+          <span style="font-size: 1.3rem;">🛍️</span>
+          <span class="cart-badge">1</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Navigation Menu -->
+    <nav class="nav-menu-bar">
+      <div class="container">
+        <ul class="nav-menu-list">
+          <li class="nav-item">
+            <a href="categoria.html?cat=chambre-52" class="nav-link">Alta Perfumaria e Nicho</a>
+          </li>
+          <li class="nav-item">
+            <a href="categoria.html?cat=mais-vendidos" class="nav-link">Especial Dia dos Pais</a>
+          </li>
+          <li class="nav-item">
+            <a href="categoria.html?cat=mais-vendidos" class="nav-link">Mais Vendidos</a>
+          </li>
+          <li class="nav-item">
+            <a href="categoria.html?cat=perfumes-importados" class="nav-link">Perfumes Importados</a>
+          </li>
+          <li class="nav-item">
+            <a href="categoria.html?cat=perfumes-arabes" class="nav-link">Perfumes Árabes</a>
+          </li>
+          <li class="nav-item">
+            <a href="categoria.html?cat=produtos-da-serra-gaucha" class="nav-link">Serra Gaúcha</a>
+          </li>
+          <li class="nav-item">
+            <a href="quem-somos.html" class="nav-link">Quem Somos</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+      <a href="index.html">Home</a> / <span>Categorias</span> / <span id="breadcrumb-current">Perfumes Árabes</span>
+    </div>
+
+    <!-- Category Header Banner -->
+    <div class="category-header-banner">
+      <h1 id="category-title">Perfumes Árabes</h1>
+      <p id="category-desc" class="category-subtitle">
+        Descubra a intensidade e sofisticação das essências orientais. Frascos suntuosos e notas marcantes de OUD, âmbar e especiarias.
+      </p>
+      <div class="category-commercial-seal">
+        <span>✨</span> <span id="category-seal">Parcele em até 8x sem juros. 5% de desconto no PIX e receba Cashback em toda compra.</span>
+      </div>
+    </div>
+
+    <!-- Layout Grid (Sidebar + Products Grid) -->
+    <div class="category-layout">
+      <!-- Sidebar Filters -->
+      <aside class="filters-sidebar">
+        <div class="filters-header">
+          <h3>Filtros</h3>
+          <span id="active-filters-badge" class="active-filters-badge">0</span>
+        </div>
+
+        <!-- Brand Filter Group -->
+        <div class="filter-group">
+          <div class="filter-group-title">Marca</div>
+          <label class="filter-option"><input type="checkbox" name="brand" value="Maison Alhambra"> Maison Alhambra</label>
+          <label class="filter-option"><input type="checkbox" name="brand" value="Lattafa"> Lattafa</label>
+          <label class="filter-option"><input type="checkbox" name="brand" value="Armaf"> Armaf</label>
+          <label class="filter-option"><input type="checkbox" name="brand" value="Maison Francis Kurkdjian"> Maison Francis Kurkdjian</label>
+          <label class="filter-option"><input type="checkbox" name="brand" value="Arôme de Capelin"> Arôme de Capelin</label>
+        </div>
+
+        <!-- Gender Filter Group -->
+        <div class="filter-group">
+          <div class="filter-group-title">Gênero</div>
+          <label class="filter-option"><input type="checkbox" name="gender" value="Masculino"> Masculino</label>
+          <label class="filter-option"><input type="checkbox" name="gender" value="Feminino"> Feminino</label>
+          <label class="filter-option"><input type="checkbox" name="gender" value="Unissex"> Unissex</label>
+        </div>
+
+        <!-- Concentration Filter Group -->
+        <div class="filter-group">
+          <div class="filter-group-title">Concentração</div>
+          <label class="filter-option"><input type="checkbox" name="concentration" value="Eau de Parfum"> Eau de Parfum</label>
+          <label class="filter-option"><input type="checkbox" name="concentration" value="Extrait de Parfum"> Extrait de Parfum</label>
+          <label class="filter-option"><input type="checkbox" name="concentration" value="Eau de Toilette"> Eau de Toilette</label>
+        </div>
+
+        <button id="btn-clear-filters" class="btn-clear-filters">Limpar Filtros Selecionados</button>
+      </aside>
+
+      <!-- Products Grid & Controls -->
+      <section>
+        <div class="listing-controls-bar">
+          <div id="category-count" class="products-count">(463 produtos)</div>
+          <div class="sorting-wrapper">
+            <label for="sort-select">Ordenar por:</label>
+            <select id="sort-select" class="select-sort">
+              <option value="relevance">Mais Vendidos</option>
+              <option value="price-asc">Menor Preço</option>
+              <option value="price-desc">Maior Preço</option>
+              <option value="rating">Melhor Avaliados</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Dynamic Product Cards Grid -->
+        <div id="products-grid" class="product-grid">
+          <!-- Rendered by filters.js -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">4</button>
+          <button class="page-btn">❯</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Cookie Banner -->
+  <div id="cookie-banner" class="cookie-banner">
+    <div>
+      Utilizamos cookies para personalizar anúncios e melhorar a sua experiência no site. Ao continuar navegando, você concorda com a nossa <a href="quem-somos.html" style="text-decoration: underline; color: var(--color-gold);">Política de Privacidade</a>.
+    </div>
+    <button id="btn-accept-cookies" class="btn-accept-cookies">PROSSEGUIR E FECHAR</button>
+  </div>
+
+  <!-- WhatsApp Float -->
+  <a href="https://wa.me/5554999999999" target="_blank" class="whatsapp-float-btn" title="Fale conosco no WhatsApp">
+    💬
+  </a>
+
+  <!-- Cart Side Drawer Overlay & Modal -->
+  <div id="cart-drawer-overlay" class="cart-drawer-overlay">
+    <div class="cart-drawer-panel">
+      <div class="cart-drawer-header">
+        <h3>Minha Sacola</h3>
+        <button class="cart-drawer-close" onclick="window.cartManager.closeDrawer()">✕</button>
+      </div>
+      <div id="cart-drawer-items" class="cart-drawer-body">
+        <!-- Rendered by cart.js -->
+      </div>
+      <div id="cart-drawer-summary" class="cart-drawer-footer">
+        <!-- Rendered by cart.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <h4>Arôme de Capelin</h4>
+        <p style="font-size: 0.85rem; color: #d1d5db; line-height: 1.6; margin-bottom: 16px;">
+          Sua loja de perfumes importados e produtos de beleza direto de Gramado - RS. Qualidade garantida, preço justo e entrega rápida para todo o Brasil.
+        </p>
+        <p style="font-size: 0.8rem; color: var(--color-gold);">
+          📍 Rua Reinaldo Sperb, 63 - Centro, Gramado - RS
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Institucional</h4>
+        <ul>
+          <li><a href="quem-somos.html">Quem Somos</a></li>
+          <li><a href="quem-somos.html">Nossa Loja Física em Gramado</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">Trocas e Devoluções</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Categorias</h4>
+        <ul>
+          <li><a href="categoria.html?cat=perfumes-arabes">Perfumes Árabes</a></li>
+          <li><a href="categoria.html?cat=perfumes-importados">Perfumes Importados</a></li>
+          <li><a href="categoria.html?cat=chambre-52">Chambre 52 (Nicho VIP)</a></li>
+          <li><a href="categoria.html?cat=produtos-da-serra-gaucha">Serra Gaúcha</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Atendimento & Segurança</h4>
+        <p style="font-size:0.85rem; color:#d1d5db; margin-bottom:12px;">💬 (54) 99999-9999<br>✉️ contato@aromedecapelin.com.br</p>
+        <div style="font-size:0.75rem; color: #9ca3af;">
+          🔒 Site Protegido por Criptografia SSL 256-bit.<br>Plataforma Magazord e-Commerce.
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        © 2026 Arôme de Capelin - Todos os direitos reservados. Gramado/RS.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="scripts/main.js?v=1786454166"></script>
+  <script src="scripts/cart.js?v=1786454166"></script>
+  <script src="scripts/filters.js?v=1786454166"></script>
+</body>
+</html>

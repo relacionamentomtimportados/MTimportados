@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo - MT Importados</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../styles/main.css?v=1786454166">
+  
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    body { background-color: #f8fafc; margin: 0; padding: 0; }
+    .admin-topbar { background: #0f172a; padding: 15px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .admin-topbar h1 { color: #fff; font-size: 1.2rem; margin: 0; font-family: var(--font-serif); }
+    .admin-topbar a { color: #f472b6; text-decoration: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+    
+    #login-container { max-width: 400px; margin: 100px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    #login-container h2 { text-align: center; color: #0f172a; font-family: var(--font-serif); margin-bottom: 20px; }
+    
+    #admin-dashboard { display: none; padding: 30px; max-width: 1200px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+
+  <!-- AUTH STATE: LOGIN -->
+  <div id="login-container">
+    <h2>Login Administrativo</h2>
+    <form id="admin-login-form">
+      <div class="admin-input-group" style="margin-bottom:15px;">
+        <label>E-mail</label>
+        <input type="email" id="login-email" required placeholder="mtimportados@gmail.com">
+      </div>
+      <div class="admin-input-group" style="margin-bottom:20px;">
+        <label>Senha</label>
+        <input type="password" id="login-password" required placeholder="123456">
+      </div>
+      <button type="submit" class="btn-primary" style="width: 100%;">Entrar</button>
+      <div id="login-error" style="color: red; margin-top: 10px; font-size: 0.85rem; text-align:center;"></div>
+    </form>
+  </div>
+
+  <!-- AUTH STATE: LOGGED IN -->
+  <div id="admin-dashboard">
+    <div class="admin-topbar">
+      <h1>MT Importados - ERP Web</h1>
+      <div style="display: flex; gap: 20px; align-items: center;">
+        <a href="../">Ver Loja</a>
+        <a onclick="window.adminAuth.logout()">Sair</a>
+      </div>
+    </div>
+    
+    <div class="container admin-container" style="margin-top: 30px; padding: 0;">
+      <div class="admin-header-bar">
+        <div>
+          <h1 style="color: #ffffff; font-size: 1.8rem; margin-bottom: 4px;">Painel Administrativo</h1>
+          <p style="font-size:0.9rem; color:#f472b6; font-weight:600;">Gerencie Produtos, Ficha Técnica, Departamentos e Marcas</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-primary" style="background:#0f172a;" onclick="window.adminManager.openReviewsPanel()">Gerenciar Avaliações</button>
+          <button class="btn-primary" onclick="window.adminManager.openNewProductModal()">+ Cadastrar Novo Produto</button>
+        </div>
+      </div>
+
+      <!-- Reviews Management Modal Container -->
+      <div id="admin-reviews-container" class="admin-form-box" style="display:none; margin-bottom:20px; border-color: #0f172a;">
+        <h3 style="font-family:var(--font-serif); font-size:1.4rem; color:#0f172a; margin-bottom:16px;">Gerenciar Avaliações de Clientes</h3>
+        <div id="admin-reviews-list">
+          <!-- Rendered by admin.js -->
+        </div>
+        <button type="button" style="background:#e2e8f0; color:#0f172a; padding:8px 16px; border-radius:4px; font-weight:700; margin-top:16px;" onclick="document.getElementById('admin-reviews-container').style.display='none'">Fechar Gestão de Avaliações</button>
+      </div>
+
+      <!-- Brand Management Modal Container -->
+      <div id="admin-brand-container" class="admin-form-box" style="display:none; margin-bottom:20px; border-color: #25d366;">
+        <h3 style="font-family:var(--font-serif); font-size:1.4rem; color:#059669; margin-bottom:16px;">Gerenciar Marcas</h3>
+        <div style="display:flex; gap:12px; margin-bottom:16px;">
+          <input type="text" id="adm-new-brand-name" placeholder="Ex: Maison Alhambra" style="padding:10px 14px; border:1px solid #cbd5e1; border-radius:4px; flex:1;">
+          <button type="button" class="btn-primary" style="background:#059669;" onclick="window.adminManager.addBrand()">Adicionar Marca</button>
+        </div>
+        <div id="admin-brands-list" style="display:flex; flex-wrap:wrap; gap:8px;">
+          <!-- Brands rendered here -->
+        </div>
+        <button type="button" style="background:#e2e8f0; color:#0f172a; padding:8px 16px; border-radius:4px; font-weight:700; margin-top:16px;" onclick="document.getElementById('admin-brand-container').style.display='none'">Fechar Gestão de Marcas</button>
+      </div>
+
+      <!-- Add / Edit Product Modal Container -->
+      <div id="admin-form-container" class="admin-form-box" style="display:none;">
+        <h3 id="adm-form-title" style="font-family:var(--font-serif); font-size:1.4rem; color:#db2777; margin-bottom:16px;">Cadastrar Novo Produto</h3>
+        <form id="admin-product-form">
+          <div class="admin-form-grid">
+            <div class="admin-input-group">
+              <label>Nome do Produto</label>
+              <input type="text" id="adm-p-title" required placeholder="Ex: Jean Lowe Immortel">
+            </div>
+            <div class="admin-input-group">
+              <label>SKU / Código Interno</label>
+              <input type="text" id="adm-p-sku" required placeholder="Ex: PRF-1807">
+            </div>
+            <div class="admin-input-group">
+              <label>Marca</label>
+              <div style="display:flex; gap:8px;">
+                <select id="adm-p-brand" required style="flex:1;">
+                  <!-- Dynamically populated -->
+                </select>
+                <button type="button" onclick="document.getElementById('admin-brand-container').style.display='block'" style="background:#0f172a; color:#fff; border-radius:4px; padding:0 12px; font-size:1.2rem; font-weight:bold;">+</button>
+              </div>
+            </div>
+            <div class="admin-input-group">
+              <label>Departamento</label>
+              <select id="adm-p-department" required>
+                <option value="perfumes-arabes">Perfumes Árabes</option>
+                <option value="perfumes-importados">Perfumes Importados</option>
+                <option value="emagrecedores">Emagrecedores</option>
+                <option value="exclusivos">Exclusivos</option>
+              </select>
+            </div>
+            <div class="admin-input-group">
+              <label>Preço Cheio (R$)</label>
+              <input type="number" step="0.01" id="adm-p-price" required placeholder="389.00">
+            </div>
+            <div class="admin-input-group">
+              <label>Desconto PIX (%)</label>
+              <input type="number" id="adm-p-pix-discount" value="8" placeholder="8">
+            </div>
+            <div class="admin-input-group">
+              <label>Quantidade em Estoque</label>
+              <input type="number" id="adm-p-stock-qty" required value="10" min="0">
+            </div>
+            <div class="admin-input-group">
+              <label>Posição Top 5 da Semana (1 a 5 ou 0 para Nulo)</label>
+              <input type="number" id="adm-p-top5" min="0" max="5" value="0">
+            </div>
+            
+            <!-- Photos (multiple) + Video Upload -->
+            <div class="admin-input-group">
+              <label>Fotos do Produto (pode selecionar várias)</label>
+              <div style="display:flex; gap:8px;">
+                <input type="file" id="adm-p-images" accept="image/*" multiple style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; width: 100%; flex:1;">
+                <button type="button" onclick="window.adminManager.clearImageSelection()" style="background:#e2e8f0; color:#0f172a; border-radius:4px; padding:0 12px; font-weight:700; white-space:nowrap;">Remover seleção</button>
+              </div>
+              <div id="adm-upload-status" style="font-size: 0.8rem; color: #059669; margin-top: 4px;"></div>
+            </div>
+            <div class="admin-input-group">
+              <label>Vídeo do Produto (opcional, para o comprador analisar)</label>
+              <div style="display:flex; gap:8px;">
+                <input type="file" id="adm-p-video" accept="video/*" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; width: 100%; flex:1;">
+                <button type="button" onclick="window.adminManager.clearVideoSelection()" style="background:#e2e8f0; color:#0f172a; border-radius:4px; padding:0 12px; font-weight:700; white-space:nowrap;">Remover seleção</button>
+              </div>
+              <div id="adm-video-upload-status" style="font-size: 0.8rem; color: #059669; margin-top: 4px;"></div>
+            </div>
+          </div>
+
+          <!-- General Technical Specifications (Ficha Técnica Detalhada) -->
+          <div style="margin-top:20px; padding:16px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
+            <h4 style="font-family:var(--font-serif); color:#0f172a; margin-bottom:12px; font-size:1.1rem;">📋 Ficha Técnica Detalhada do Produto</h4>
+            <div class="admin-form-grid">
+              <div class="admin-input-group">
+                <label>Volume / Conteúdo (ml ou g)</label>
+                <input type="text" id="adm-spec-volume" placeholder="Ex: 100ml / 60g">
+              </div>
+              <div class="admin-input-group">
+                <label>Concentração / Categoria Técnica</label>
+                <input type="text" id="adm-spec-concentration" placeholder="Ex: Eau de Parfum (EDP) / Suplemento">
+              </div>
+              <div class="admin-input-group">
+                <label>Fixação / Duração Esperada</label>
+                <input type="text" id="adm-spec-fixation" placeholder="Ex: Alta Fixação (12h+) / Resultados em 30d">
+              </div>
+              <div class="admin-input-group">
+                <label>Família Olfativa / Linha</label>
+                <input type="text" id="adm-spec-family" placeholder="Ex: Amadeirado Oriental / Alta Performance">
+              </div>
+              <div class="admin-input-group">
+                <label>Origem / Procedência</label>
+                <input type="text" id="adm-spec-origin" placeholder="Ex: Importado Direto / Dubai - Emirados Árabes">
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Spec Groups by Department -->
+          <div class="dynamic-spec-group" id="specs-perfumes" style="display:none; margin-top:16px;">
+            <h4 style="font-family:var(--font-serif); color:#db2777; margin-bottom:12px;">Pirâmide Olfativa</h4>
+            <div class="admin-form-grid">
+              <div class="admin-input-group">
+                <label>Notas de Saída (Topo)</label>
+                <input type="text" id="adm-spec-top" placeholder="Ex: Cítricos, Bergamota">
+              </div>
+              <div class="admin-input-group">
+                <label>Notas de Coração</label>
+                <input type="text" id="adm-spec-heart" placeholder="Ex: Rosa, Jasmim">
+              </div>
+              <div class="admin-input-group">
+                <label>Notas de Fundo</label>
+                <input type="text" id="adm-spec-base" placeholder="Ex: Âmbar, Oud, Musk">
+              </div>
+            </div>
+          </div>
+
+          <div class="dynamic-spec-group" id="specs-emagrecedores" style="display:none; margin-top:16px;">
+            <h4 style="font-family:var(--font-serif); color:#059669; margin-bottom:12px;">Informações Clínicas</h4>
+            <div class="admin-form-grid">
+              <div class="admin-input-group">
+                <label>Princípio Ativo</label>
+                <input type="text" id="adm-spec-active" placeholder="Ex: Semaglutida">
+              </div>
+              <div class="admin-input-group">
+                <label>Modo de Uso / Posologia</label>
+                <input type="text" id="adm-spec-usage" placeholder="Ex: 1x por semana, dose progressiva">
+              </div>
+              <div class="admin-input-group">
+                <label>Apresentação</label>
+                <input type="text" id="adm-spec-format" placeholder="Ex: Caneta aplicadora">
+              </div>
+            </div>
+          </div>
+
+          <div class="dynamic-spec-group" id="specs-exclusivos" style="display:none; margin-top:16px;">
+            <h4 style="font-family:var(--font-serif); color:#0f172a; margin-bottom:12px;">Especificações Físicas</h4>
+            <div class="admin-form-grid">
+              <div class="admin-input-group">
+                <label>Material / Composição</label>
+                <input type="text" id="adm-spec-material" placeholder="Ex: Couro legítimo">
+              </div>
+              <div class="admin-input-group">
+                <label>Tamanhos / Variações (separados por vírgula)</label>
+                <input type="text" id="adm-spec-sizes" placeholder="Ex: P, M, G">
+              </div>
+              <div class="admin-input-group">
+                <label>Edição / Coleção</label>
+                <input type="text" id="adm-spec-edition" placeholder="Ex: Edição Limitada">
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-input-group" style="margin-top: 16px;">
+            <label>Descrição Detalhada do Produto</label>
+            <textarea id="adm-p-desc" rows="3" required placeholder="Escreva a descrição do produto..."></textarea>
+          </div>
+          <div style="display:flex; gap:10px; margin-top: 16px;">
+            <button type="submit" class="btn-primary" id="btn-save-product">Salvar Alterações</button>
+            <button type="button" style="background:#e2e8f0; color:#0f172a; padding:10px 20px; border-radius:4px; font-weight:700;" onclick="document.getElementById('admin-form-container').style.display='none'">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Products Management Table -->
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Foto</th>
+            <th>Produto</th>
+            <th>Marca</th>
+            <th>Departamento</th>
+            <th>Estoque</th>
+            <th>Preço (R$)</th>
+            <th>Ranking</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="admin-products-table-body">
+          <!-- Rendered by admin.js -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="../scripts/supabase.js?v=1786454166"></script>
+  <script src="scripts/auth.js?v=1786454166"></script>
+  <script src="scripts/admin.js?v=1786454166"></script>
+</body>
+</html>
