@@ -207,7 +207,7 @@ class CategoryManager {
           </div>
 
           <button class="btn-buy-card" onclick="window.cartManager.addItem({id: '${p.id}', name: '${p.title.replace(/'/g, "\\'")}', price: ${p.price}, pixPrice: ${pixVal}, pixDiscountPercent: ${p.pixDiscount || 8}, image: '${p.image}'}, 1, 'Padrão')">
-            COMPRAR VIA WHATSAPP
+            🛒 COMPRAR
           </button>
         </div>
       </div>

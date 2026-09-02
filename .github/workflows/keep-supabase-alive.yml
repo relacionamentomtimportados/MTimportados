@@ -1,0 +1,25 @@
+name: Keep Supabase Alive
+
+# O Supabase pausa o projeto sozinho depois de 7 dias sem nenhum acesso no
+# plano grátis. Essa automação faz uma consulta bem pequena e inofensiva
+# (só lê 1 produto) todo dia, pra garantir que o projeto nunca fique
+# inativo tempo suficiente pra pausar. Roda de graça no GitHub Actions.
+
+on:
+  schedule:
+    - cron: '0 12 * * *'   # todo dia às 12:00 UTC (~09:00 no horário de Brasília)
+  workflow_dispatch: {}     # permite rodar manualmente em Actions > Run workflow
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://ndpgaqoiuocduxhjjerg.supabase.co/rest/v1/products?select=id&limit=1" \
+            -H "apikey: sb_publishable_3ud2vwKCaHzCg_1lKo56rA_wJZmm8WR")
+          echo "Supabase respondeu com status HTTP $STATUS"
+          if [ "$STATUS" -ge 400 ]; then
+            echo "::warning::Supabase respondeu com erro ($STATUS) — verifique se o projeto está pausado ou a chave mudou."
+          fi

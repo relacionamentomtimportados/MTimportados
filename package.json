@@ -1,0 +1,9 @@
+{
+  "name": "mt-importados",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MT Importados — site + funções serverless (checkout Mercado Pago, webhook, integração Bling)",
+  "engines": {
+    "node": ">=18.x"
+  }
+}

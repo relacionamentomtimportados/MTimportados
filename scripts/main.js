@@ -1784,8 +1784,12 @@ function navigateTo(viewName, params = {}) {
   runViewLoaders(viewName, params);
 
   let hashStr = `#${viewName}`;
-  if (params.cat) hashStr += `?cat=${params.cat}`;
-  if (params.id) hashStr += `?id=${params.id}`;
+  const queryParts = [];
+  if (params.cat) queryParts.push(`cat=${params.cat}`);
+  if (params.id) queryParts.push(`id=${params.id}`);
+  if (params.status) queryParts.push(`status=${params.status}`);
+  if (params.order_id) queryParts.push(`order_id=${params.order_id}`);
+  if (queryParts.length > 0) hashStr += `?${queryParts.join('&')}`;
   history.pushState(null, null, hashStr);
 }
 
@@ -1802,6 +1806,57 @@ function runViewLoaders(viewName, params) {
     if (window.adminManager) {
       window.adminManager.renderAdminProductsTable();
     }
+  } else if (viewName === 'order-status') {
+    loadOrderStatus(params.order_id, params.status);
+  }
+}
+
+// Shows the real, server-confirmed status of an order after returning from
+// Mercado Pago. Never trusts the `status` query param by itself (that's just
+// a UX hint from the redirect) — it always asks our own backend, which in
+// turn only reflects what Mercado Pago's webhook already confirmed.
+async function loadOrderStatus(orderId, redirectStatus) {
+  const panel = document.getElementById('order-status-panel');
+  if (!panel) return;
+
+  if (!orderId) {
+    panel.innerHTML = `<p>Não encontramos os dados desse pedido.</p>`;
+    return;
+  }
+
+  panel.innerHTML = `<p>Confirmando seu pagamento...</p>`;
+
+  try {
+    const res = await fetch(`/api/order-status?id=${encodeURIComponent(orderId)}`);
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || 'Pedido não encontrado.');
+
+    const isPaid = data.payment_status === 'approved';
+    const isFailed = data.status === 'failed';
+    const totalStr = `R$ ${Number(data.total || 0).toFixed(2).replace('.', ',')}`;
+
+    if (isPaid) {
+      panel.innerHTML = `
+        <h2 style="color:var(--color-green-pix);">✓ Pagamento Confirmado!</h2>
+        <p>Obrigado, ${data.first_name || ''}! Seu pedido no valor de <strong>${totalStr}</strong> foi aprovado.</p>
+        <p style="font-size:0.85rem; color:var(--color-text-muted);">Número do pedido: ${data.id}</p>
+      `;
+    } else if (isFailed) {
+      panel.innerHTML = `
+        <h2 style="color:#ef4444;">Pagamento não aprovado</h2>
+        <p>Seu pedido não foi concluído. Você pode tentar novamente ou entrar em contato pelo WhatsApp.</p>
+      `;
+    } else {
+      panel.innerHTML = `
+        <h2>Pagamento em processamento</h2>
+        <p>Assim que o Mercado Pago confirmar, você recebe a confirmação por e-mail. Isso pode levar alguns minutos.</p>
+        <p style="font-size:0.85rem; color:var(--color-text-muted);">Número do pedido: ${data.id}</p>
+      `;
+    }
+  } catch (err) {
+    console.error('Erro ao consultar status do pedido:', err);
+    panel.innerHTML = `<p>Não conseguimos confirmar o status agora. Se o pagamento foi concluído, você vai receber a confirmação por e-mail.</p>`;
   }
 }
 
@@ -1985,6 +2040,9 @@ function initHashRouter() {
   } else if (hash.startsWith('#product')) {
     const params = new URLSearchParams(hash.split('?')[1] || '');
     navigateTo('product', { id: params.get('id') || '1807' });
+  } else if (hash.startsWith('#pedido')) {
+    const params = new URLSearchParams(hash.split('?')[1] || '');
+    navigateTo('order-status', { status: params.get('status'), order_id: params.get('order_id') });
   } else if (hash.startsWith('#about')) {
     navigateTo('about');
   } else if (hash.startsWith('#admin')) {

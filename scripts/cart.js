@@ -178,16 +178,16 @@ class CartManager {
         <span style="color:var(--color-green-pix);">R$ ${totalPix.toFixed(2).replace('.', ',')}</span>
       </div>
       
-      <button onclick="window.cartManager.openWhatsAppCheckoutFromCart()" class="btn-checkout" style="background:#059669; display:flex; align-items:center; justify-content:center; gap:8px;">
-        CONCLUIR PEDIDO NO WHATSAPP
+      <button onclick="window.cartManager.openCheckoutFromCart()" class="btn-checkout" style="background:#059669; display:flex; align-items:center; justify-content:center; gap:8px;">
+        FINALIZAR COMPRA
       </button>
     `;
   }
 
   // ==========================================================================
-  // WHATSAPP DIRECT CHECKOUT MODAL LOGIC
+  // CHECKOUT MODAL (redireciona pro Mercado Pago)
   // ==========================================================================
-  openWhatsAppModal(productObj) {
+  openCheckoutModal(productObj) {
     this.currentCheckoutProduct = productObj;
 
     const modal = document.getElementById('whatsapp-checkout-modal');
@@ -226,14 +226,14 @@ class CartManager {
     modal.classList.add('active');
   }
 
-  openWhatsAppCheckoutCurrentProduct() {
+  openCheckoutCurrentProduct() {
     const currentProduct = window.PRODUCTS_DATA ? window.PRODUCTS_DATA[0] : null;
     if (currentProduct) {
-      this.openWhatsAppModal(currentProduct);
+      this.openCheckoutModal(currentProduct);
     }
   }
 
-  openWhatsAppCheckoutFromCart() {
+  openCheckoutFromCart() {
     this.closeDrawer();
     if (this.cart.length > 0) {
       const firstItem = this.cart[0];
@@ -241,7 +241,7 @@ class CartManager {
       const totalPix = this.cart.reduce((sum, i) => sum + ((i.pixPrice || (i.price * 0.92)) * i.quantity), 0);
       const totalRegular = this.cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
 
-      this.openWhatsAppModal({
+      this.openCheckoutModal({
         id: 'cart-combined',
         title: combinedTitle,
         price: totalRegular,
@@ -253,17 +253,18 @@ class CartManager {
     }
   }
 
-  closeWhatsAppModal() {
+  closeCheckoutModal() {
     const modal = document.getElementById('whatsapp-checkout-modal');
     if (modal) modal.classList.remove('active');
   }
 
-  submitWhatsAppCheckout(e) {
+  async submitCheckout(e) {
     e.preventDefault();
 
     const nameInput = document.getElementById('checkout-user-name');
     const phoneInput = document.getElementById('checkout-user-phone');
     const emailInput = document.getElementById('checkout-user-email');
+    const submitBtn = document.querySelector('#whatsapp-checkout-form button[type="submit"]');
 
     if (!nameInput || !phoneInput || !emailInput) return;
 
@@ -277,72 +278,63 @@ class CartManager {
     }
 
     const checkoutTarget = this.currentCheckoutProduct;
-    let textMessage = `*NOVO PEDIDO - MT IMPORTADOS*\n\n`;
-    textMessage += `*Dados do Cliente:*\n`;
-    textMessage += `• Nome: ${name}\n`;
-    textMessage += `• Telefone: ${phone}\n`;
-    textMessage += `• E-mail: ${email}\n\n`;
+    let items;
 
     if (checkoutTarget && checkoutTarget.id === 'cart-combined' && this.cart.length > 0) {
-      // Multi-item Cart Checkout
-      let totalRegular = 0;
-      let totalPix = 0;
-
-      textMessage += `*Produtos no Carrinho:*\n`;
-      this.cart.forEach((item, idx) => {
-        const regTotal = item.price * item.quantity;
-        const pixUnit = item.pixPrice || (item.price * 0.92);
-        const pixTotalItem = pixUnit * item.quantity;
-        const discPercent = item.price > 0 ? (((item.price - pixUnit) / item.price) * 100).toFixed(0) : '0';
-
-        totalRegular += regTotal;
-        totalPix += pixTotalItem;
-
-        textMessage += `${idx + 1}. ${item.title} (${item.quantity}x)\n`;
-        textMessage += `   Opção: ${item.variant || 'Padrão'}\n`;
-        textMessage += `   De: R$ ${regTotal.toFixed(2).replace('.', ',')} ➔ *Por: R$ ${pixTotalItem.toFixed(2).replace('.', ',')} no PIX* (-${discPercent}%)\n`;
-      });
-
-      const totalSavings = totalRegular - totalPix;
-      const effectivePercent = totalRegular > 0 ? ((totalSavings / totalRegular) * 100).toFixed(1) : '0.0';
-
-      textMessage += `\n*Resumo Financeiro do Pedido:*\n`;
-      textMessage += `• Subtotal Regular: R$ ${totalRegular.toFixed(2).replace('.', ',')}\n`;
-      textMessage += `• Economia no PIX: R$ ${totalSavings.toFixed(2).replace('.', ',')} (-${effectivePercent}% de desconto total)\n`;
-      textMessage += `• *TOTAL FINAL NO PIX: R$ ${totalPix.toFixed(2).replace('.', ',')}*\n\n`;
+      items = this.cart.map(item => ({
+        product_id: item.id,
+        variant: item.variant || 'Padrão',
+        quantity: item.quantity
+      }));
     } else {
-      // Single Item Checkout
       const item = checkoutTarget || (this.cart.length > 0 ? this.cart[0] : null);
       if (!item) {
         alert("Nenhum produto selecionado para a compra.");
         return;
       }
-
-      const qty = item.quantity || 1;
-      const unitPix = item.pixPrice || (item.price * 0.92);
-      const pixTotal = unitPix * qty;
-      const regTotal = item.price * qty;
-      const savings = regTotal - pixTotal;
-      const percent = item.price > 0 ? (((item.price - unitPix) / item.price) * 100).toFixed(1) : '0.0';
-
-      textMessage += `*Produto Selecionado:*\n`;
-      textMessage += `• Item: ${item.title}\n`;
-      if (item.variant) textMessage += `• Opção: ${item.variant}\n`;
-      textMessage += `• Quantidade: ${qty}x\n\n`;
-
-      textMessage += `*Resumo Financeiro:*\n`;
-      textMessage += `• Valor Regular: R$ ${regTotal.toFixed(2).replace('.', ',')}\n`;
-      textMessage += `• Economia no PIX: R$ ${savings.toFixed(2).replace('.', ',')} (-${percent}% OFF)\n`;
-      textMessage += `• *TOTAL NO PIX: R$ ${pixTotal.toFixed(2).replace('.', ',')}*\n\n`;
+      items = [{
+        product_id: item.id,
+        variant: item.variant || 'Padrão',
+        quantity: item.quantity || 1
+      }];
     }
 
-    textMessage += `Gostaria de confirmar meu pedido e receber os dados bancários para pagamento no PIX.`;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Gerando pagamento...';
+    }
 
-    const encodedText = encodeURIComponent(textMessage);
-    const whatsappUrl = `https://wa.me/5511999999999?text=${encodedText}`;
+    try {
+      const response = await fetch('/api/create-preference', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          customer: { name, phone, email }
+        })
+      });
 
-    this.closeWhatsAppModal();
-    window.open(whatsappUrl, '_blank');
+      const data = await response.json();
+
+      if (!response.ok || !data.init_point) {
+        throw new Error(data.error || 'Não foi possível iniciar o pagamento.');
+      }
+
+      // Clear the cart before leaving — the order already exists in Supabase
+      // regardless of what happens next on Mercado Pago's side.
+      this.cart = [];
+      this.saveCart();
+      this.closeCheckoutModal();
+
+      window.location.href = data.init_point;
+    } catch (err) {
+      console.error('Erro ao iniciar checkout:', err);
+      alert('Não foi possível iniciar o pagamento. Tente novamente em instantes.');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'IR PARA O PAGAMENTO';
+      }
+    }
   }
 
   showToast(msg) {
